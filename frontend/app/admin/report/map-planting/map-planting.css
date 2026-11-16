@@ -1,0 +1,33 @@
+.planting-report-page .planting-controls form { min-width: 270px; }
+.planting-report-page .planting-controls select { width: 90px; }
+.planting-table-wrap { margin: 0 1.75rem 1.5rem; border: 1px solid #e4e8ef; border-radius: .65rem; }
+.planting-table { min-width: 1100px; }
+.planting-table th, .planting-table td { padding: .85rem .8rem; }
+.planting-table th:first-child, .planting-table td:first-child { padding-left: 1.1rem; }
+.planting-table thead { background: #1c283f; }
+.planting-table thead th { color: #fff; font-weight: 700; }
+.planting-map-dialog { position: fixed; inset: 0; z-index: 1100; display: flex; flex-direction: column; background: #fff; }
+.planting-map-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 1.4rem; border-bottom: 1px solid #e4e8ef; }
+.planting-map-body { display: grid; grid-template-columns: 285px minmax(0, 1fr); min-height: 0; flex: 1; }
+.planting-map-legend { min-height: 0; overflow: auto; padding: 1.3rem; border-right: 1px solid #e4e8ef; }
+.planting-layer-row { display: flex; align-items: center; gap: .65rem; padding: .65rem .3rem; border-bottom: 1px solid #eef1f6; cursor: pointer; }
+.planting-layer-row strong { font-size: .88rem; }
+.planting-layer-row small { font-size: .74rem; }
+.planting-layer-swatch { width: 18px; height: 18px; flex: 0 0 18px; border: 1px solid #fff; border-radius: 4px; box-shadow: 0 0 0 1px #cbd5e1; }
+.planting-map-canvas { width: 100%; height: 100%; }
+@media (max-width: 767px) {
+  .planting-table-wrap { margin-inline: 1rem; }
+  .planting-map-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(165px, 30vh) minmax(0, 1fr); }
+  .planting-map-legend { border-right: 0; border-bottom: 1px solid #e4e8ef; }
+}
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+  #kt_aside, #kt_header, #kt_footer, .planting-print, .planting-controls, .planting-map-dialog { display: none !important; }
+  html, body, #kt_wrapper, #kt_content, #kt_post, #kt_content_container { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; overflow: visible !important; }
+  .planting-report-page .card { box-shadow: none !important; border: 0 !important; }
+  .planting-table-wrap { overflow: visible; margin: 0; }
+  .planting-table { min-width: 0; width: 100%; font-size: 9pt; }
+  .planting-table th, .planting-table td { border: 1px solid #888 !important; padding: 2mm; }
+  .planting-table thead { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .planting-table tr { break-inside: avoid; }
+}

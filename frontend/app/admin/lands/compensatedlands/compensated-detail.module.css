@@ -1,0 +1,29 @@
+.tabs { gap: 4px; padding: 8px 12px 0; background: #f8fafc; }
+.tabs button { display: inline-flex; align-items: center; padding: 13px 15px; border-radius: 7px 7px 0 0; font-size: 11px; font-weight: 650; color: #7f93a5; }
+.tabs button[aria-selected="true"] { background: #fff; color: #2d72b5; border-bottom-color: #4488c8; }
+.historyTab { min-width: 0; min-height: 180px; background: #fff; }
+.historyTab:focus { outline: none; }
+.historyTab:focus-visible { outline: 2px solid #4488c8; outline-offset: -2px; }
+.sequence :global(.compensated-process-steps) { gap: 10px; }
+.sequence :global(.compensated-process-steps) > li { padding: 13px 14px; border-radius: 11px; box-shadow: none; }
+.stage { min-width: 0; flex: 1; }
+.stageToggle { display: flex; align-items: center; gap: 9px; list-style: none; cursor: pointer; }
+.stageToggle::-webkit-details-marker { display: none; }
+.stageToggle > span:first-child { flex: 1; min-width: 0; }
+.stageToggle strong { display: block; color: #3c5a73; font-size: 12px; font-weight: 650; line-height: 1.5; }
+.stageHint { display: block; margin-top: 4px; color: #93a6b5; font-size: 9px; line-height: 1.6; }
+.stageCount { display: grid; place-items: center; flex: 0 0 22px; width: 22px; height: 22px; border: 1px solid #e0e8ef; border-radius: 6px; background: #f6f9fb; color: #a3b0bc; font-size: 9px; font-weight: 700; }
+.recorded { border-color: #cce7db; background: #e9f5ef; color: #4a9672; }
+.stageToggle::after { content: "+"; color: #8ca2b3; font-size: 14px; }
+.stage[open] > .stageToggle::after { content: "−"; }
+.stageToggle:focus-visible { outline: 2px solid #63a2ce; outline-offset: 4px; border-radius: 4px; }
+.noRecord { margin: 13px 0 0; padding-top: 10px; border-top: 1px solid #e3ebf1; color: #94a5b4; font-size: 10px; line-height: 1.6; }
+.sequence :global(.compensated-process-records) { gap: 7px; margin-top: 12px; }
+.sequence :global(.compensated-process-record) { border-color: #e0e9ed; padding: 10px; border-radius: 7px; }
+.sequence :global(.compensated-process-record-id) { font-size: 10px; color: #7893a8; }
+.sequence :global(.compensated-process-meta), .sequence :global(.compensated-process-note) { font-size: 10px; line-height: 1.7; }
+.decision { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; }
+.approved { background: #e9f5ed; color: #3f9363; }
+.rejected { background: #fff0f0; color: #c36a70; }
+.pending { background: #fff7e5; color: #ba9c54; }
+@media (max-width: 575px) { .tabs { padding: 6px 5px 0; gap: 0; } .tabs button { padding: 11px 9px; font-size: 10px; } }

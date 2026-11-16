@@ -1,0 +1,179 @@
+.estate-progress-page {
+  min-width: 0;
+  color: #17223b;
+}
+
+.estate-progress-logo {
+  display: none;
+  object-fit: contain;
+}
+
+.estate-progress-tabs,
+.estate-progress-year-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.estate-progress-tabs button {
+  flex: 0 0 auto;
+  min-width: 190px;
+  max-width: 260px;
+  padding: 0.85rem 1rem;
+  border: 1px solid #dce4ef;
+  border-radius: 0.7rem;
+  background: #fff;
+  color: #334155;
+  text-align: left;
+}
+
+.estate-progress-tabs button span {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.estate-progress-tabs button[aria-selected="true"],
+.estate-progress-year-tabs button[aria-selected="true"] {
+  background: #1c283f;
+  border-color: #1c283f;
+  color: #fff;
+}
+
+.estate-progress-company,
+.estate-progress-month-section {
+  display: none;
+}
+
+.estate-progress-company.is-active,
+.estate-progress-month-section.is-active {
+  display: block;
+}
+
+.estate-progress-company .card-body {
+  min-width: 0;
+}
+
+.estate-progress-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dce4ef;
+  border-radius: 0.7rem;
+  scrollbar-width: thin;
+}
+
+.estate-progress-table {
+  min-width: 1320px;
+}
+
+.estate-progress-year-table {
+  min-width: 650px;
+}
+
+.estate-progress-month-table {
+  min-width: 1600px;
+}
+
+.estate-progress-table th,
+.estate-progress-table td,
+.estate-progress-year-table th,
+.estate-progress-year-table td,
+.estate-progress-month-table th,
+.estate-progress-month-table td {
+  padding: 0.7rem 0.85rem;
+  white-space: nowrap;
+}
+
+.estate-progress-table thead,
+.estate-progress-year-table thead,
+.estate-progress-month-table thead {
+  background: #1c283f;
+  color: #fff;
+}
+
+.estate-progress-table thead th,
+.estate-progress-year-table thead th,
+.estate-progress-month-table thead th {
+  color: inherit;
+  border-color: #354158;
+}
+
+.estate-progress-table thead tr:first-child th[colspan] {
+  text-align: center;
+}
+
+.estate-progress-table tbody tr:nth-child(even),
+.estate-progress-year-table tbody tr:nth-child(even),
+.estate-progress-month-table tbody tr:nth-child(6n + 4),
+.estate-progress-month-table tbody tr:nth-child(6n + 5),
+.estate-progress-month-table tbody tr:nth-child(6n + 6) {
+  background: #f7f9fc;
+}
+
+@media print {
+  @page { size: A3 landscape; margin: 10mm; }
+
+  #kt_aside,
+  #kt_header,
+  #kt_footer,
+  .estate-progress-print,
+  .estate-progress-tabs,
+  .estate-progress-year-tabs { display: none !important; }
+
+  html, body, #kt_wrapper, #kt_content, #kt_post, #kt_content_container {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .estate-progress-page {
+    display: block !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .estate-progress-heading { margin-bottom: 5mm; }
+  .estate-progress-logo { display: block; }
+  .estate-progress-summary { box-shadow: none !important; margin-bottom: 5mm; }
+  .estate-progress-company,
+  .estate-progress-company.is-active,
+  .estate-progress-month-section,
+  .estate-progress-month-section.is-active {
+    display: block !important;
+    box-shadow: none !important;
+  }
+
+  .estate-progress-company { margin-bottom: 10mm; border: 0 !important; }
+  .estate-progress-company .card-body { padding: 0; }
+  .estate-progress-company .card-header { padding: 0 0 3mm; break-after: avoid-page; }
+  .estate-progress-month-section { margin-top: 5mm; }
+  .estate-progress-table-wrap { overflow: visible; border-color: #999; }
+  .estate-progress-table,
+  .estate-progress-year-table,
+  .estate-progress-month-table { width: 100%; min-width: 0; font-size: 7pt; }
+
+  .estate-progress-table th,
+  .estate-progress-table td,
+  .estate-progress-year-table th,
+  .estate-progress-year-table td,
+  .estate-progress-month-table th,
+  .estate-progress-month-table td {
+    padding: 1.5mm;
+    border: 1px solid #999 !important;
+    white-space: normal;
+  }
+
+  .estate-progress-table thead,
+  .estate-progress-year-table thead,
+  .estate-progress-month-table thead {
+    background: #1c283f !important;
+    color: #fff !important;
+    print-color-adjust: exact;
+  }
+
+  .estate-progress-table tr,
+  .estate-progress-year-table tr,
+  .estate-progress-month-table tr { break-inside: avoid; }
+}

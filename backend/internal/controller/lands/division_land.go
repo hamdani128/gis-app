@@ -1,0 +1,290 @@
+package lands
+
+import (
+	"context"
+	"crypto/rand"
+	"encoding/hex"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"log"
+	"mime/multipart"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"time"
+
+	landModel "gis-app/backend/internal/model/lands"
+	"gis-app/backend/internal/response"
+	"github.com/jackc/pgx/v5"
+)
+
+type DivisionLandController struct{ Model *landModel.DivisionLandModel }
+
+func divisionLandContext(r *http.Request) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(r.Context(), 15*time.Second)
+}
+func divisionLandCompany(w http.ResponseWriter, r *http.Request) (int64, int64, bool) {
+	companyID, err := strconv.ParseInt(r.URL.Query().Get("company_id"), 10, 64)
+	if err != nil || companyID < 0 {
+		response.Error(w, 400, "company_id wajib berupa angka nol atau positif")
+		return 0, 0, false
+	}
+	var id int64
+	if r.PathValue("id") != "" {
+		id, err = strconv.ParseInt(r.PathValue("id"), 10, 64)
+		if err != nil || id <= 0 {
+			response.Error(w, 400, "ID Division land tidak valid")
+			return 0, 0, false
+		}
+	}
+	return companyID, id, true
+}
+func divisionLandFailure(w http.ResponseWriter, err error) {
+	status, msg := http.StatusInternalServerError, "Gagal memproses data Division land"
+	if errors.Is(err, pgx.ErrNoRows) {
+		status, msg = http.StatusNotFound, "Data Division land tidak ditemukan pada company aktif"
+	} else if strings.Contains(err.Error(), "Gis_Data_Spatials harus") || strings.Contains(err.Error(), "Gis_Aquistion_Divisions harus") || strings.Contains(err.Error(), "Gis_Potential_Lands harus") {
+		status, msg = http.StatusUnprocessableEntity, err.Error()
+	} else if strings.Contains(err.Error(), "GeoJSON") || strings.Contains(err.Error(), "mapdata harus") || strings.Contains(err.Error(), "tanggal target") || strings.Contains(err.Error(), "tidak termasuk company aktif") {
+		status, msg = http.StatusBadRequest, err.Error()
+	}
+	log.Printf("Division land: %v", err)
+	response.Error(w, status, msg)
+}
+func (c *DivisionLandController) Index(w http.ResponseWriter, r *http.Request) {
+	companyID, _, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	items, err := c.Model.GetAll(ctx, companyID)
+	if err != nil {
+		divisionLandFailure(w, err)
+		return
+	}
+	response.Success(w, "Data Division land berhasil diambil", items)
+}
+func (c *DivisionLandController) Options(w http.ResponseWriter, r *http.Request) {
+	companyID, _, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	items, err := c.Model.GetOptions(ctx, companyID)
+	if err != nil {
+		divisionLandFailure(w, err)
+		return
+	}
+	response.Success(w, "Pilihan Division land berhasil diambil", items)
+}
+func (c *DivisionLandController) Map(w http.ResponseWriter, r *http.Request) {
+	companyID, id, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	uploadPath, err := c.Model.GetMapUpload(ctx, companyID, id)
+	if err != nil {
+		divisionLandFailure(w, err)
+		return
+	}
+	mapData, err := c.Model.GetMap(ctx, companyID, id)
+	if err != nil {
+		if uploadPath == "" {
+			divisionLandFailure(w, err)
+			return
+		}
+		mapData = `{"type":"FeatureCollection","features":[]}`
+	}
+	response.Success(w, "Peta Division land berhasil diambil", map[string]string{"map_data": mapData, "map_upload": uploadPath})
+}
+
+func divisionUploadDir() string {
+	cwd, _ := os.Getwd()
+	if filepath.Base(cwd) == "backend" {
+		return filepath.Join("uploads", "division-lands")
+	}
+	return filepath.Join("backend", "uploads", "division-lands")
+}
+
+func storeDivisionMapFile(file multipart.File, header *multipart.FileHeader) (string, string, error) {
+	defer file.Close()
+	if header.Size > 20*1024*1024 {
+		return "", "", fmt.Errorf("Ukuran file koordinat maksimal 20 MB")
+	}
+	ext := strings.ToLower(filepath.Ext(header.Filename))
+	if !map[string]bool{".csv": true, ".json": true, ".geojson": true, ".mif": true, ".wkt": true, ".txt": true}[ext] {
+		return "", "", fmt.Errorf("Format file koordinat tidak didukung")
+	}
+	var token [16]byte
+	if _, err := rand.Read(token[:]); err != nil {
+		return "", "", err
+	}
+	dir := divisionUploadDir()
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", "", err
+	}
+	name := "map-" + hex.EncodeToString(token[:]) + ext
+	fullPath := filepath.Join(dir, name)
+	out, err := os.OpenFile(fullPath, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
+	if err != nil {
+		return "", "", err
+	}
+	if _, err = io.Copy(out, file); err != nil {
+		out.Close()
+		os.Remove(fullPath)
+		return "", "", err
+	}
+	if err = out.Close(); err != nil {
+		os.Remove(fullPath)
+		return "", "", err
+	}
+	return "/api/division-map-files/" + name, fullPath, nil
+}
+
+func (c *DivisionLandController) MapUpload(w http.ResponseWriter, r *http.Request) {
+	companyID, id, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	path, err := c.Model.GetMapUpload(ctx, companyID, id)
+	if err != nil {
+		divisionLandFailure(w, err)
+		return
+	}
+	if path == "" {
+		http.NotFound(w, r)
+		return
+	}
+	name := filepath.Base(strings.ReplaceAll(path, "\\", "/"))
+	if name == "." || name == "/" {
+		http.NotFound(w, r)
+		return
+	}
+	http.ServeFile(w, r, filepath.Join(divisionUploadDir(), name))
+}
+
+func (c *DivisionLandController) SaveMap(w http.ResponseWriter, r *http.Request) {
+	companyID, id, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	var input struct {
+		MapData     string `json:"map_data"`
+		ClearUpload bool   `json:"clear_upload"`
+	}
+	var uploadPath *string
+	var storedPath string
+	if strings.HasPrefix(strings.ToLower(r.Header.Get("Content-Type")), "multipart/form-data") {
+		r.Body = http.MaxBytesReader(w, r.Body, 25*1024*1024)
+		if err := r.ParseMultipartForm(25 * 1024 * 1024); err != nil {
+			response.Error(w, 400, "Form upload tidak valid")
+			return
+		}
+		input.MapData = r.FormValue("map_data")
+		input.ClearUpload = r.FormValue("clear_upload") == "true"
+		file, header, err := r.FormFile("map_upload")
+		if err == nil {
+			path, fullPath, storeErr := storeDivisionMapFile(file, header)
+			if storeErr != nil {
+				response.Error(w, 400, storeErr.Error())
+				return
+			}
+			uploadPath, storedPath = &path, fullPath
+		} else if !errors.Is(err, http.ErrMissingFile) {
+			response.Error(w, 400, "File koordinat tidak valid")
+			return
+		}
+	} else if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 20*1024*1024)).Decode(&input); err != nil {
+		response.Error(w, 400, "Data peta tidak valid")
+		return
+	}
+	if uploadPath == nil && input.ClearUpload {
+		empty := ""
+		uploadPath = &empty
+	}
+	if storedPath != "" && strings.TrimSpace(input.MapData) == "" {
+		os.Remove(storedPath)
+		response.Error(w, 400, "File koordinat tidak menghasilkan data peta")
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	path, err := c.Model.GetMapUpload(ctx, companyID, id)
+	if err != nil {
+		if storedPath != "" {
+			os.Remove(storedPath)
+		}
+		divisionLandFailure(w, err)
+		return
+	}
+	mapData, err := c.Model.SaveMap(ctx, companyID, id, input.MapData, uploadPath)
+	if err != nil {
+		if storedPath != "" {
+			os.Remove(storedPath)
+		}
+		divisionLandFailure(w, err)
+		return
+	}
+	if uploadPath != nil {
+		path = *uploadPath
+	}
+	response.Success(w, "Peta Division land berhasil disimpan", map[string]string{"map_data": mapData, "map_upload": path})
+}
+func (c *DivisionLandController) save(w http.ResponseWriter, r *http.Request, id *int64) {
+	companyID, _, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	var in landModel.DivisionLandInput
+	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1024*1024)).Decode(&in); err != nil {
+		response.Error(w, 400, "Data form tidak valid")
+		return
+	}
+	if strings.TrimSpace(in.DivisionName) == "" || in.PotentialLandID <= 0 {
+		response.Error(w, 400, "Block Plan dan Potential Land wajib diisi")
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	item, err := c.Model.Save(ctx, companyID, id, in)
+	if err != nil {
+		divisionLandFailure(w, err)
+		return
+	}
+	if id == nil {
+		response.Created(w, "Division land berhasil ditambahkan", item)
+	} else {
+		response.Success(w, "Division land berhasil diperbarui", item)
+	}
+}
+func (c *DivisionLandController) Store(w http.ResponseWriter, r *http.Request) { c.save(w, r, nil) }
+func (c *DivisionLandController) Update(w http.ResponseWriter, r *http.Request) {
+	_, id, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	c.save(w, r, &id)
+}
+func (c *DivisionLandController) Destroy(w http.ResponseWriter, r *http.Request) {
+	companyID, id, ok := divisionLandCompany(w, r)
+	if !ok {
+		return
+	}
+	ctx, cancel := divisionLandContext(r)
+	defer cancel()
+	if err := c.Model.Delete(ctx, companyID, id); err != nil {
+		divisionLandFailure(w, err)
+		return
+	}
+	response.Success(w, "Division land berhasil dihapus", nil)
+}

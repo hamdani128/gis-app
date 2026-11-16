@@ -1,0 +1,33 @@
+.panel { padding: 22px; min-width: 0; }
+.heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.heading h3 { margin: 0 0 7px; color: #283d51; font-size: 15px; font-weight: 700; }
+.heading p { margin: 0; color: #8a98a6; font-size: 11px; line-height: 1.7; }
+.count { flex-shrink: 0; padding: 6px 10px; border: 1px solid #e2eaf2; border-radius: 7px; background: #f5f8fc; color: #748ca5; font-size: 10px; }
+.table thead th { padding: 12px 14px; border-bottom: 1px solid #e0e8f0; background: #f6f9fc; color: #70859b; font-size: 10px; font-weight: 650; }
+.table tbody td { padding: 15px 14px; border-bottom: 1px solid #ecf0f5; color: #5b7187; font-size: 11px; }
+.table strong { display: block; color: #344f69; font-weight: 650; }
+.table small { display: block; max-width: 280px; margin-top: 5px; color: #93a2b0; font-size: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.fileName { display: block; max-width: 230px; overflow-wrap: anywhere; color: #8999aa; font-size: 10px; }
+.memoCard { display: flex; align-items: flex-start; gap: 16px; padding: 20px; border: 1px solid #dfe8f1; border-radius: 12px; background: #f9fbfd; }
+.fileIcon { display: grid; place-items: center; flex: 0 0 45px; width: 45px; height: 49px; border: 1px solid #d6e5f2; border-radius: 10px; background: #eaf3fc; color: #5286b4; font-size: 18px; font-weight: 700; }
+.memoInfo { flex: 1; min-width: 0; }
+.memoInfo strong { display: block; margin: 1px 0 7px; color: #385672; font-size: 14px; overflow-wrap: anywhere; }
+.memoInfo > span { color: #8a9eae; font-size: 11px; }
+.memoInfo p { margin: 12px 0 0; color: #687f93; font-size: 11px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.memoInfo small { display: block; margin-top: 10px; color: #a68b58; font-size: 10px; }
+.empty { padding: 28px; border: 1px dashed #dce6ef; border-radius: 11px; background: #f9fbfd; text-align: center; }
+.empty strong { color: #6e879d; font-size: 13px; }
+.empty p { margin: 10px 0 18px; color: #94a4b3; font-size: 11px; }
+.dialog { width: min(1100px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); margin: auto; padding: 0; border: 1px solid #dce6ef; border-radius: 15px; background: #fff; color: #324d66; box-shadow: 0 20px 90px #11253d40; }
+.dialog::backdrop { background: #101e35a8; }
+.dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 21px 25px; border-bottom: 1px solid #e4ebf2; background: #f8fbfd; }
+.dialogHeader span { color: #8fa5b7; font-size: 8px; letter-spacing: 1.5px; font-weight: 700; }
+.dialogHeader h2 { margin: 7px 0 0; font-size: 16px; color: #355370; overflow-wrap: anywhere; }
+.dialogBody { padding: 20px; }
+.dialogFooter { display: flex; justify-content: flex-end; gap: 10px; padding: 15px 22px; border-top: 1px solid #e4ebf2; }
+.modalSummary { display: flex; flex-wrap: wrap; gap: 20px 40px; padding: 0 0 20px; }
+.modalSummary small, .modalSummary strong { display: block; }
+.modalSummary small { margin-bottom: 5px; color: #95a7b5; font-size: 10px; }
+.modalSummary strong { color: #4e6b83; font-size: 12px; }
+.modalSummary p { flex-basis: 100%; margin: 0; white-space: pre-wrap; color: #8599aa; }
+@media (max-width: 575px) { .panel { padding: 15px; } .heading { flex-direction: column; gap: 8px; } .memoCard { flex-wrap: wrap; padding: 15px; } .memoCard > button { margin-left: 61px; } .dialogHeader { padding: 16px; } .dialogBody { padding: 12px; } }

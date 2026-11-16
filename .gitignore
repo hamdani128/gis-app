@@ -1,0 +1,36 @@
+# Local configuration and credentials
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+!**/.env.local.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependencies, builds and caches
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/bin/
+**/.gocache/
+**/coverage/
+*.exe
+*.tsbuildinfo
+*.log
+
+# Application data and local development files
+**/uploads/
+**/tmp/
+**/.codex/
+**/.git-backup/
+.DS_Store
+Thumbs.db
+/frontend/gbr*.png
+/frontend/sample-signature.pdf
+/frontend/index.html
+/frontend/sign-in.html

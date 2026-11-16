@@ -1,0 +1,27 @@
+.detail-land-report-table {
+  margin: 0 2rem 1.5rem;
+  border: 1px solid #e4e6ef;
+  border-radius: 0.65rem;
+  scrollbar-width: thin;
+}
+
+.detail-land-report-table > table {
+  min-width: 1500px;
+}
+
+.detail-land-report-table > table th,
+.detail-land-report-table > table td {
+  padding: 0.85rem 0.75rem;
+}
+
+.detail-land-report-table > table th:first-child,
+.detail-land-report-table > table td:first-child {
+  min-width: 90px;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .detail-land-report-table {
+    margin-inline: 1rem;
+  }
+}

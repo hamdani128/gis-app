@@ -1,0 +1,6 @@
+.env
+*.exe
+.gocache/
+tmp/
+uploads/payment-approvals/
+uploads/payment-signatures/

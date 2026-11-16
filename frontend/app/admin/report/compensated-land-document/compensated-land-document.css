@@ -1,0 +1,117 @@
+.document-report-page {
+  min-width: 0;
+}
+
+.document-report-filter input,
+.document-report-filter select {
+  width: 190px;
+}
+
+.document-report-controls form {
+  min-width: min(100%, 320px);
+}
+
+.document-report-controls select {
+  width: 90px;
+}
+
+.document-report-table-wrap {
+  margin: 0 1.75rem 1.5rem;
+  border: 1px solid #e1e7ef;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+}
+
+.document-report-table {
+  min-width: 1900px;
+  width: 100%;
+}
+
+.document-report-table th,
+.document-report-table td {
+  padding: 0.85rem 0.9rem !important;
+  white-space: nowrap;
+}
+
+.document-report-table th {
+  background: #1d293d;
+  color: #fff;
+  font-weight: 600;
+  border-color: #34435b;
+}
+
+.document-report-table td:first-child,
+.document-report-table th:first-child {
+  min-width: 170px;
+  padding-left: 1.2rem !important;
+}
+
+.document-report-table td:nth-child(3),
+.document-report-table th:nth-child(3) {
+  min-width: 165px;
+}
+
+.document-report-modal {
+  background: rgb(12 21 36 / 55%);
+  z-index: 1100;
+}
+
+.document-report-modal .modal-dialog {
+  max-width: min(1200px, 96vw);
+}
+
+.document-report-modal .modal-body {
+  max-height: 75vh;
+}
+
+@media print {
+  @page {
+    size: A3 landscape;
+    margin: 10mm;
+  }
+
+  .document-report-page {
+    display: block !important;
+    padding: 0 !important;
+  }
+
+  .document-report-page .document-report-filter,
+  .document-report-page .document-report-controls,
+  .document-report-page .document-report-print,
+  .document-report-page .card-footer,
+  .document-report-page .document-report-modal {
+    display: none !important;
+  }
+
+  .document-report-page .card {
+    box-shadow: none !important;
+  }
+
+  .document-report-table-wrap {
+    margin: 0;
+    overflow: visible;
+    border: 0;
+  }
+
+  .document-report-table {
+    min-width: 0;
+    font-size: 7pt;
+  }
+
+  .document-report-table th,
+  .document-report-table td {
+    padding: 3px 4px !important;
+    border: 1px solid #aeb8c6 !important;
+  }
+
+  .document-report-table th {
+    background: #1d293d !important;
+    color: #fff !important;
+    print-color-adjust: exact;
+  }
+
+  .document-report-table th:last-child,
+  .document-report-table td:last-child {
+    display: none;
+  }
+}

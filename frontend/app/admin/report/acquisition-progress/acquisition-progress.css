@@ -1,0 +1,158 @@
+.acquisition-progress-page .acquisition-progress-logo {
+  display: none;
+}
+
+.acquisition-progress-page .acquisition-progress-tabs {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.acquisition-progress-page .acquisition-progress-tab {
+  flex: 0 0 auto;
+  min-width: 180px;
+  max-width: 260px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e4e6ef;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #5e6278;
+  text-align: left;
+}
+
+.acquisition-progress-page .acquisition-progress-tab[aria-selected="true"] {
+  border-color: #1b2430;
+  background: #1b2430;
+  color: #fff;
+}
+
+.acquisition-progress-page .acquisition-progress-division:not(.is-active) {
+  display: none;
+}
+
+.acquisition-progress-page .acquisition-progress-table-wrap {
+  margin: 0 1.5rem 1.5rem;
+  border: 1px solid #e4e6ef;
+  border-radius: 0.65rem;
+  overflow-x: auto;
+}
+
+.acquisition-progress-page .acquisition-progress-table {
+  min-width: 680px;
+  width: 100%;
+}
+
+.acquisition-progress-page .acquisition-progress-table th,
+.acquisition-progress-page .acquisition-progress-table td {
+  padding: 0.7rem 0.8rem;
+}
+
+.acquisition-progress-page .acquisition-progress-table thead th {
+  background: #1b2430;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.acquisition-progress-page .acquisition-progress-table thead th:first-child {
+  min-width: 200px;
+}
+
+.acquisition-progress-page .acquisition-progress-table .acquisition-progress-emphasis {
+  background: #f5f8fa;
+  font-weight: 700;
+}
+
+@media print {
+  @page { size: A4 landscape; margin: 12mm; }
+
+  #kt_aside,
+  #kt_header,
+  #kt_footer,
+  .acquisition-progress-tabs,
+  .acquisition-progress-print,
+  .acquisition-progress-more {
+    display: none !important;
+  }
+
+  html, body, #kt_wrapper, #kt_content, #kt_post, #kt_content_container {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .acquisition-progress-page {
+    display: block !important;
+    padding: 0 !important;
+    color: #000 !important;
+  }
+
+  .acquisition-progress-page .card {
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .acquisition-progress-page .acquisition-progress-logo {
+    display: block !important;
+    width: 65px !important;
+    height: 65px !important;
+    object-fit: contain;
+  }
+
+  .acquisition-progress-page .acquisition-progress-heading,
+  .acquisition-progress-page .acquisition-progress-summary {
+    margin-bottom: 5mm;
+  }
+
+  .acquisition-progress-page .acquisition-progress-summary {
+    border: 1px solid #bbb !important;
+  }
+
+  .acquisition-progress-page .acquisition-progress-summary .card-body {
+    padding: 3mm 4mm !important;
+  }
+
+  .acquisition-progress-page .acquisition-progress-division,
+  .acquisition-progress-page .acquisition-progress-division:not(.is-active) {
+    display: block !important;
+    margin: 0 0 7mm !important;
+    break-inside: avoid;
+  }
+
+  .acquisition-progress-page .acquisition-progress-division .card-header {
+    min-height: 0;
+    padding: 0 0 2mm !important;
+  }
+
+  .acquisition-progress-page .acquisition-progress-table-wrap {
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+
+  .acquisition-progress-page .acquisition-progress-table {
+    min-width: 0 !important;
+    width: 100% !important;
+    border-collapse: collapse;
+    font-size: 8pt;
+  }
+
+  .acquisition-progress-page .acquisition-progress-table tr {
+    break-inside: avoid;
+  }
+
+  .acquisition-progress-page .acquisition-progress-table th,
+  .acquisition-progress-page .acquisition-progress-table td {
+    padding: 1.5mm 2mm !important;
+    border: 1px solid #c7c7c7 !important;
+  }
+
+  .acquisition-progress-page .acquisition-progress-table thead th {
+    background: #1b2430 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
